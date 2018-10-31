@@ -1,4 +1,5 @@
 #include <iostream>
+// #pragma pack(8)
 using namespace std;
 class Data
 {
