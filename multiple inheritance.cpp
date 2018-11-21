@@ -66,6 +66,7 @@ Derived::~Derived(){
 void Derived::display(){
     // BaseA::show();  //调用BaseA类的show()函数
     day();
+    // show();  "Derived::show" is ambiguous
     // BaseB::show();  //调用BaseB类的show()函数
     cout<<"m_e = "<<m_e<<endl;
 }
