@@ -60,9 +60,9 @@ int main(int argc, char const *argv[])
 {
     int l_value = 1;
     lvalue(l_value);
-   // rvalue(a); //candidate function not viable: no known conversion from 'int' to 'int &&' for 1st argument
+   // rvalue(l_value); //candidate function not viable: no known conversion from 'int' to 'int &&' for 1st argument
 
-   // lvalue(1); //candidate function not viable: expects an l-value for 1st argument
+    // lvalue(1); //candidate function not viable: expects an l-value for 1st argument
     rvalue(1);
 
     MyString a = MyString("Hello"); 
