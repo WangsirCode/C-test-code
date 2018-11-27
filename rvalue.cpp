@@ -18,6 +18,7 @@ public:
  MyString() { 
    _data = NULL; 
    _len = 0; 
+    std::cout << "init is called! No Source"<< std::endl; 
  } 
  
  MyString(const char* p) { 
@@ -65,6 +66,7 @@ int main(int argc, char const *argv[])
     // lvalue(1); //candidate function not viable: expects an l-value for 1st argument
     rvalue(1);
 
+    MyString b;
     MyString a = MyString("Hello"); 
     a = MyString("Hello"); 
     std::vector<MyString> vec; 
