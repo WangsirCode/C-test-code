@@ -8,7 +8,7 @@ class Foo
 	int y;
 	int z;
     public:
-	Foo(std::initializer_list<int double> list)
+	Foo(std::initializer_list<int> list)
 	{
 		auto it= list.begin();
 		x = *it++;
