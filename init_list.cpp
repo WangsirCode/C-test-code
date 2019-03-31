@@ -1,5 +1,6 @@
 #include <iostream>
 using namespace std;
+// initializer_list 是接收可变长度参数的方式
 class Foo
 {
     public:
@@ -7,7 +8,7 @@ class Foo
 	int y;
 	int z;
     public:
-	Foo(std::initializer_list<int> list)
+	Foo(std::initializer_list<int double> list)
 	{
 		auto it= list.begin();
 		x = *it++;
