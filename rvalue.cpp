@@ -1,76 +1,52 @@
 #include <iostream>
-#include <vector>
+#include <utility>
 using namespace std;
 
 // 转移语义可以将资源 ( 堆，系统对象等 ) 从一个对象转移到另一个对象，这样能够减少不必要的临时对象的创建、拷贝以及销毁，能够大幅度提高 C++ 应用程序的性能
 // 对于值类型而言，引用类型不存在这个问题，因此对于python这样都是引用对象的语言而言，不存在这个问题
 
-class MyString { 
-private: 
- char* _data; 
- size_t   _len; 
- void _init_data(const char *s) { 
-   _data = new char[_len+1]; 
-   memcpy(_data, s, _len); 
-   _data[_len] = '\0'; 
- } 
-public: 
- MyString() { 
-   _data = NULL; 
-   _len = 0; 
-    std::cout << "init is called! No Source"<< std::endl; 
- } 
- 
- MyString(const char* p) { 
-   _len = strlen (p); 
-   _init_data(p); 
-   std::cout << "init is called! source: " << _data << std::endl; 
- } 
- 
- MyString(const MyString& str) { 
-   _len = str._len; 
-   _init_data(str._data); 
-   std::cout << "Copy Constructor is called! source: " << str._data << std::endl; 
- } 
- 
- MyString& operator=(const MyString& str) { 
-   if (this != &str) { 
-     _len = str._len; 
-     _init_data(str._data); 
-   } 
-   std::cout << "Copy Assignment is called! source: " << str._data << std::endl; 
-   return *this; 
- } 
- 
- virtual ~MyString() { 
-   if (_data) free(_data); 
- } 
-}; 
-
-void lvalue(int& a)
+// 1. 右值引用是什么 。 和左值引用一样，同样是引用， 实现方式是存了一个地址。不过对于 int&& a = 1; 必须先将“1”存在内存中，然后另a指向他
+// 2. 对于已右值引用为参数的函数而言，寄存器传的是地址。实现方式和左右引用完全一样。
+// 3. 左右引用和右值引用的唯一区别是右值引用只能绑定到右值上，左右引用只能绑定到左值上。 两个的存取方式完全一样
+// 4. 左值引用和右值引用都是引用， 属于左值。 只有临时变量属于右值。
+// 5. std::move可以将任何左值变为右值(包括int, int&, int&&)
+int funcA(int& a)
 {
-    cout << "lvalue" << endl;
+    int b = a;
+    return 1;
 }
 
-void rvalue(int&& a)
+int funcB(int&& a)
 {
-    cout<< "rvalue" << endl;
+    int b = a;
+    return 1;
 }
 
-int main(int argc, char const *argv[])
+int funcC(int a)
 {
-    int l_value = 1;
-    lvalue(l_value);
-   // rvalue(l_value); //candidate function not viable: no known conversion from 'int' to 'int &&' for 1st argument
+    int b = a;
+    return 1;
+}
 
-    // lvalue(1); //candidate function not viable: expects an l-value for 1st argument
-    rvalue(1);
+int main()
+{
+    int value = 1;
+    int& l_value_ref = value;
+    int&& r_value_ref = 1;
 
-    MyString b;
-    MyString a = MyString("Hello"); 
-    a = MyString("Hello"); 
-    std::vector<MyString> vec; 
-    vec.push_back(MyString("World")); 
+    int& l_value_ref_test = l_value_ref;
+    int& l_value_ref_test2 = r_value_ref;
+    // int& l_value_ref_test3 = 1;  wrong
 
-    return 0;
+    int&& r_value_ref_test = 1;
+    // int&& r_value_ref_test2 = value;  an rvalue reference cannot be bound to an lvalue
+    int&& r_value_ref_test2 = std::move(value);
+    // int&& r_value_ref_test3 = l_value_ref; an rvalue reference cannot be bound to an lvalue
+    int&& r_value_ref_test3 = std::move(l_value_ref);
+    // int&& r_value_ref_test = r_value_ref; an rvalue reference cannot be bound to an lvalue
+    int&& r_value_ref_test4 = std::move(r_value_ref);
+
+
+    int value_test = l_value_ref;
+    int value_test2 = r_value_ref;
 }
